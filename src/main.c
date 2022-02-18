@@ -1,6 +1,8 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_rcc.h"
 #include "stm32f4xx_gpio.h"
+#include "led.h"
+#include "system_stm32f4xx.h"
 
 
 void Delay(__IO uint32_t nCount)
@@ -11,25 +13,25 @@ void Delay(__IO uint32_t nCount)
 
 int main(void)
 {
+	LED led;
 
-	GPIO_InitTypeDef GPIOD_InitDef;
+	SysTick_Config(SystemCoreClock / 1000);
+	SystemInit();
 
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
 
-	GPIOD_InitDef.GPIO_Pin = GPIO_Pin_All;
-	GPIOD_InitDef.GPIO_Mode = GPIO_Mode_OUT;
-	GPIOD_InitDef.GPIO_OType = GPIO_OType_PP;
-	GPIOD_InitDef.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	GPIOD_InitDef.GPIO_Speed = GPIO_Speed_2MHz;
-
-	//Initialize pins
-	GPIO_Init(GPIOD, &GPIOD_InitDef);
-
+	LED_Setup(&led,GPIO_Pin_13);
+	
 
 	//volatile int i;
 	while (1)
 	{
-		GPIO_ToggleBits(GPIOD, GPIO_Pin_All);
+
+	  if(LED_GetState(&led))
+		  LED_Reset(&led);
+
+	  if(!LED_GetState(&led))
+		  LED_Set(&led);
+
 		Delay(1000);
 	}
 }
