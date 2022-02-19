@@ -1,16 +1,23 @@
 CC = arm-none-eabi-gcc 
 
-FLAGS =  -DSTM32F4XX -DSTM32F40XX -DUSE_STDPERIPH_DRIVER -DUSE_STM32F4_DISCOVERY -DHSE_VALUE=8000000  
+
+LD_FLAGS = -T stm32f4_flash.ld -mthumb -mcpu=cortex-m4  --specs=nosys.specs 
+CPU_FLAGS =  -DSTM32F4XX -DSTM32F40XX -DUSE_STDPERIPH_DRIVER -DUSE_STM32F4_DISCOVERY -DHSE_VALUE=8000000  
+C_FLAGS =	 -mthumb -mcpu=cortex-m4 
+FLAGS= $(CPU_FLAGS) $(LD_FLAGS) $(C_FLAGS)
+
+
+
 
 INCLUDE = -Ilib/inc/periph/ -Ilib/inc/device -Ilib/inc/core 
 
-SOURCE = src/main.c lib/src/periph/stm32f4xx_gpio.c lib/src/periph/stm32f4xx_rcc.c
+SOURCE = src/*.c lib/src/periph/*.c 
 
 TARGET = main.bin
 
 all : 
 
-	$(CC) --specs=nosys.specs $(FLAGS) $(INCLUDE) $(SOURCE) -o $(TARGET) 
+	$(CC)  $(FLAGS) $(INCLUDE) $(SOURCE) -o $(TARGET) 
 
 
 clean:	
