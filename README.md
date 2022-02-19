@@ -7,7 +7,6 @@
 ```
 
 ###  Board yükleme için
-
 ```console
     make upload
 ```
@@ -17,8 +16,6 @@
 ```console
     make delete
 ```
-
-# Debug için
 
 ###  Debug mod için
 ```console
@@ -33,4 +30,6 @@
 ```
 
 GDB kullanımı için : 
-
+```console
+    man gdb
+```
