@@ -1,37 +1,30 @@
 #include "stm32f4xx.h"
-#include "stm32f4xx_rcc.h"
-#include "stm32f4xx_gpio.h"
-#include "led.h"
+#include "stm32f4xx_conf.h"
 #include "uart.h"
-#include "system_stm32f4xx.h"
+#include "led.h"
 
 
-void Delay(__IO uint32_t nCount)
-{
-    while (nCount--);
-}
+int main(void) {
 
-
-int main(void)
-{
+	UART_Led_Config uart_led_config={500,500};
 	LED led;
 
 	SysTick_Config(SystemCoreClock / 1000);
 	SystemInit();
-
+	UART_Setup();
 	LED_Setup(&led,GPIO_Pin_13);
 
-	//volatile int i;
-	while (1)
-	{
 
-	  if(LED_GetState(&led))
+  while (1) {
+
+	  UART_GetCommand(&uart_led_config);
+
+	  if(LED_GetStateTime(&led) > uart_led_config.on_time && LED_GetState(&led))
 		  LED_Reset(&led);
 
-	  if(!LED_GetState(&led))
+	  if(LED_GetStateTime(&led) > uart_led_config.off_time && !LED_GetState(&led))
 		  LED_Set(&led);
+  }
 
-		Delay(1000);
-	}
+  return 0;
 }
-
