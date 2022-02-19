@@ -1,4 +1,4 @@
-# stm32f4-uart-control-on-linux
+# STM32F4 UART ile Led Kontrolü
 
 STM32F4 Discovery board üzerinde uart arayüzü ile led kontrolü sağlar. 
 
